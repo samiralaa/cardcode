@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-       
+
         'guard' => 'api',
         'passwords' => 'users',
     ],
@@ -98,8 +98,8 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_reset_tokens',
-            'expire' => 60,
+            'table' => 'password_resets',
+            'expire' => 60, // Token expiry in minutes
             'throttle' => 60,
         ],
     ],
