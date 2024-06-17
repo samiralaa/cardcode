@@ -3,20 +3,24 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Mail\ResetPasswordCodeMail;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
+
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    // }
 
     public function login(Request $request)
     {
@@ -54,6 +58,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'domin_name'=>$request->domin_name,
             'password' => Hash::make($request->password),
         ]);
 
@@ -85,7 +90,7 @@ class AuthController extends Controller
 
     public function resetPassword(Request $request)
     {
-       
+
         $user = User::where('email', $request->email)->first();
         $user->update(
             [
@@ -96,5 +101,23 @@ class AuthController extends Controller
         $success['succees'] = true;
         return response()->json($success, 200);
     }
+
+    public function sendResetCode(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $user = User::where('email', $request->email)->firstOrFail();
+        $reset_code = Str::random(6); // Generate a 6 character random code
+        $user->update([
+            'reset_code' => $reset_code,
+            'reset_code_expiry' => now()->addMinutes(30) // Code expires in 30 minutes
+        ]);
+
+        // Send the code to the user's email
+        Mail::to($user->email)->send(new ResetPasswordCodeMail($user, $reset_code));
+
+        return response()->json(['message' => 'Reset code sent successfully'],200);
+    }
+
 
 }

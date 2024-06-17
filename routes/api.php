@@ -15,3 +15,4 @@ Route::controller(AuthController::class)->group(function () {
 });
 Route::post('password/email', [AuthController::class, 'sendResetLinkEmail']);
 Route::post('password/reset', [AuthController::class, 'resetPassword']);
+Route::post('/forgot-password', [AuthController::class, 'sendResetCode']);
