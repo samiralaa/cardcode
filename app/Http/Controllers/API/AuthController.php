@@ -110,7 +110,7 @@ class AuthController extends Controller
         $reset_code = Str::random(6); // Generate a 6 character random code
         $user->update([
             'reset_code' => $reset_code,
-            'reset_code_expiry' => now()->addMinutes(30) // Code expires in 30 minutes
+            'reset_code_expiry' => now()->addMinutes(2) // Code expires in 30 minutes
         ]);
 
         // Send the code to the user's email

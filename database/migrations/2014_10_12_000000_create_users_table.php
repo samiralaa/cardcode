@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('reset_code')->nullable();
             $table->timestamp('reset_code_expiry')->nullable();
+            $table->string('domin_name')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
