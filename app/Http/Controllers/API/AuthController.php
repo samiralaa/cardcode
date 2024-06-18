@@ -137,7 +137,7 @@ class AuthController extends Controller
         //return $reset_code;
         $user->update([
             'reset_code' => $reset_code,
-            'reset_code_expiry' => now()->addMinutes(2) // Code expires in 30 minutes
+            'reset_code_expiry' => now()->addMinutes(5) // Code expires in 30 minutes
         ]);
 
         // Send the code to the user's email
