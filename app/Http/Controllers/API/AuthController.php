@@ -114,7 +114,7 @@ class AuthController extends Controller
         ]);
 
         // Send the code to the user's email
-        Mail::to($user->email)->send(new ResetPasswordCodeMail($user, $reset_code));
+        Mail::to($user->email)->send(new ResetPasswordCodeMail($reset_code));
 
         return response()->json(['message' => 'Reset code sent successfully'],200);
     }
