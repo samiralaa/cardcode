@@ -106,8 +106,9 @@ class AuthController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
-        $user = User::where('email', $request->email)->firstOrFail();
+        $user = User::where('email', $request->email)->first();
         $reset_code = Str::random(6); // Generate a 6 character random code
+        //return $reset_code;
         $user->update([
             'reset_code' => $reset_code,
             'reset_code_expiry' => now()->addMinutes(2) // Code expires in 30 minutes
