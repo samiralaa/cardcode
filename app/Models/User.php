@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Models;
+use App\Models\Card;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -62,4 +62,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * Get the cards for the user.
+     */
+   
+     public function cards()
+     {
+        return $this->hasMany(Card::class);
+     }
 }
