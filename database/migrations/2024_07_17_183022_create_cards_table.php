@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('link');
-            $table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')
+            ->references('id')
+            ->on('users')
+            ->onDelete('cascade');
             $table->string('logo');
             $table->timestamps();
         });
