@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Card;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\CardLink;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -31,23 +32,56 @@ class CardController extends Controller
     }
 
   
-
     public function store(Request $request)
     {
         $user = Auth::user();
+
+        // Validate the request
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'link' => 'required|string|max:255',
-            'logo' => 'nullable',
+            'logo' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'card_links' => 'required|array',
+            'card_logo' => 'required|array',
+            'card_title' => 'required|array',
+            'card_links.*' => 'required|string|max:255',
+            'card_logo.*' => 'nullable|string|max:255',
+            'card_title.*' => 'nullable|string|max:255',
         ]);
-    
-      
+
         $validatedData['user_id'] = $user->id;
         $validatedData['slug'] = $user->name;
 
+        // Handle the image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('card_images', 'public');
+            $validatedData['image'] = $imagePath;
+        }
+
+        // Create the Card
         $card = Card::create($validatedData);
-    
-        return response()->json($card, 201);
+
+        // Ensure arrays are properly handled
+        $cardLinks = $request->input('card_links', []);
+        $cardLogos = $request->input('card_logo', []);
+        $cardTitles = $request->input('card_title', []);
+
+        // Validate lengths match
+        if (count($cardLinks) !== count($cardLogos) || count($cardLinks) !== count($cardTitles)) {
+            return response()->json(['message' => 'Mismatch in card_links, card_logo, or card_title counts'], 400);
+        }
+
+        // Create the associated CardLinks
+        foreach ($cardLinks as $index => $link) {
+            CardLink::create([
+                'card_id' => $card->id,
+                'link' => $link,
+                'logo' => $cardLogos[$index] ?? null,
+                'title' => $cardTitles[$index] ?? null,
+            ]);
+        }
+
+        return response()->json($card->load('cardLinks'), 201); // Load card links in response
     }
     
  public function update(Request $request, $id)

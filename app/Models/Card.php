@@ -9,15 +9,18 @@ class Card extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title',
-        'link',
-        'logo',
         'user_id',
+        'image',
     ];
 
     public function user()
     {
     return $this->belongsTo(User::class,'user_id','id');
+    }
+
+    public function cardLinks()
+    {
+        return $this->hasMany(CardLink::class,'card_id','id');
     }
 
 }
