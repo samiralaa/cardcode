@@ -38,14 +38,10 @@ class CardController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'link' => 'required|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'logo' => 'nullable',
         ]);
     
-        if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->store('logos', 'public');
-            $validatedData['logo'] = $path;
-        }
-    
+      
         $validatedData['user_id'] = $user->id;
         $validatedData['slug'] = $user->name;
 
