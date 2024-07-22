@@ -22,7 +22,7 @@ class CardController extends Controller
     {
 
      
-        $card =User::where('name', $slug)->with('cards')->first();
+        $card =User::where('name', $slug)->with('cards.cardLinks')->first();
       
     
         if (!$card) {
