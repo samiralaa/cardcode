@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\CardLink;
@@ -7,59 +6,58 @@ use Illuminate\Http\Request;
 
 class CardLinkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        // Get all card links
+        return response()->json( CardLink::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // Validate request
+        $validated = $request->validate([
+            'card_id' => 'required|exists:cards,id',
+            'link' => 'required|string',
+            'logo' => 'required|string',
+            'title' => 'required|string',
+        ]);
+
+        // Create new card link
+        $cardLink = CardLink::create($validated);
+
+        return response()->json($cardLink, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(CardLink $cardLink)
+    public function show($id)
     {
-        //
+        // Get a single card link
+        $cardLink = CardLink::findOrFail($id);
+        return response()->json($cardLink);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CardLink $cardLink)
+    public function update(Request $request, $id)
     {
-        //
+        // Validate request
+        $validated = $request->validate([
+            'card_id' => 'sometimes|exists:cards,id',
+            'link' => 'sometimes|string',
+            'logo' => 'sometimes|string',
+            'title' => 'sometimes|string',
+        ]);
+
+        // Find card link and update
+        $cardLink = CardLink::findOrFail($id);
+        $cardLink->update($validated);
+
+        return response()->json($cardLink);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CardLink $cardLink)
+    public function destroy($id)
     {
-        //
-    }
+        // Find card link and delete
+        $cardLink = CardLink::findOrFail($id);
+        $cardLink->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CardLink $cardLink)
-    {
-        //
+        return response()->json(null, 204);
     }
 }

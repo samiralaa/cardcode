@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Api\CardController;
+use App\Http\Controllers\CardLinkController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
@@ -29,3 +30,17 @@ Route::middleware('auth:api')->group(function () {
     Route::get('cards/slug/{slug}', [CardController::class, 'showBySlug']);
 
 });
+
+
+Route::middleware('auth:api')->group(function () {
+    Route::get('cards-link', [CardLinkController::class, 'index']);
+    Route::get('cards-link/{id}', [CardLinkController::class, 'show']);
+    Route::post('cards-link', [CardLinkController::class, 'store']);
+    Route::post('cards-link/{id}', [CardLinkController::class, 'update']);
+    Route::delete('cards-link/{id}', [CardLinkController::class, 'destroy']);
+    Route::get('cards-link/slug/{slug}', [CardLinkController::class, 'showBySlug']);
+
+});
+
+
+
