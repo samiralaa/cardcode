@@ -38,15 +38,7 @@ class CardController extends Controller
 
         // Validate the request
         $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
             'logo' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'card_links' => 'required|array',
-            'card_logo' => 'required|array',
-            'card_title' => 'required|array',
-            'card_links.*' => 'required|string|max:255',
-            'card_logo.*' => 'nullable|string|max:255',
-            'card_title.*' => 'nullable|string|max:255',
         ]);
 
         $validatedData['user_id'] = $user->id;
