@@ -11,6 +11,7 @@ class Card extends Model
     protected $fillable = [
         'user_id',
         'image',
+        'qr_image',
     ];
 
     public function user()

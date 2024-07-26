@@ -38,11 +38,10 @@ class CardController extends Controller
 
         // Validate the request
         $validatedData = $request->validate([
-            'logo' => 'nullable|string|max:255',
+            'image' => 'nullable|string|max:255',
+            'qr_image'=>'nullable|string',
         ]);
-
         $validatedData['user_id'] = $user->id;
-        $validatedData['slug'] = $user->name;
 
         // Handle the image upload
         if ($request->hasFile('image')) {
@@ -52,28 +51,7 @@ class CardController extends Controller
 
         // Create the Card
         $card = Card::create($validatedData);
-
-        // Ensure arrays are properly handled
-        $cardLinks = $request->input('card_links', []);
-        $cardLogos = $request->input('card_logo', []);
-        $cardTitles = $request->input('card_title', []);
-
-        // Validate lengths match
-        if (count($cardLinks) !== count($cardLogos) || count($cardLinks) !== count($cardTitles)) {
-            return response()->json(['message' => 'Mismatch in card_links, card_logo, or card_title counts'], 400);
-        }
-
-        // Create the associated CardLinks
-        foreach ($cardLinks as $index => $link) {
-            CardLink::create([
-                'card_id' => $card->id,
-                'link' => $link,
-                'logo' => $cardLogos[$index] ?? null,
-                'title' => $cardTitles[$index] ?? null,
-            ]);
-        }
-
-        return response()->json($card->load('cardLinks'), 201); // Load card links in response
+        return response()->json($card, 201); // Load card links in response
     }
     
  public function update(Request $request, $id)
