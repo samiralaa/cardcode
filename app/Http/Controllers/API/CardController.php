@@ -45,7 +45,8 @@ class CardController extends Controller
 
         // Validate the request
         $validatedData = $request->validate([
-            'image' => 'nullable|string|max:255',
+            'image' => 'required|image',
+            'qr_image'=> 'nullable|image',
         ]);
         $validatedData['user_id'] = $user->id;
 
@@ -55,6 +56,10 @@ class CardController extends Controller
             $validatedData['image'] = $imagePath;
         }
 
+        if ($request->hasFile('qr_image')) {
+            $imagePath = $request->file('image')->store('qr_image', 'public');
+            $validatedData['qr_image'] = $imagePath;
+        }
         // Create the Card
         $card = Card::create($validatedData);
         return response()->json($card, 201); // Load card links in response
