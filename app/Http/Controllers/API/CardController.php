@@ -24,6 +24,7 @@ class CardController extends Controller
         return response()->json( $card);
     }
         
+        
     public function show($slug)
     {
 
@@ -32,7 +33,7 @@ class CardController extends Controller
       
     
         if (!$card) {
-          ['message' => 'Card not found'], 404);
+            return response()->json(['message' => 'Card not found'], 404);
         }
         return response()->json($card, 200);
     }
