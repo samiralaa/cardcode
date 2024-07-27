@@ -112,7 +112,7 @@ class CardController extends Controller
     public function myCard()
     {
         $user = auth()->user();
-        $card = Card::where('user_id', $user->id)->with('cards.cardLinks')->first();
+        $card = User::where('id', $user->id)->with('cards.cardLinks')->first();
         return response()->json($card, 200);
     }
 }
