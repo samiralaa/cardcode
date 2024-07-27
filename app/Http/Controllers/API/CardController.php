@@ -18,6 +18,12 @@ class CardController extends Controller
         return response()->json(Card::all(), 200);
     }
 
+    public function getOne($id)
+    {
+        $card = Card::where('id', $id)->with('cardLinks')->first();
+        return response()->json( $card);
+    }
+        
     public function show($slug)
     {
 
@@ -26,7 +32,7 @@ class CardController extends Controller
       
     
         if (!$card) {
-            return response()->json(['message' => 'Card not found'], 404);
+          ['message' => 'Card not found'], 404);
         }
         return response()->json($card, 200);
     }
@@ -39,7 +45,6 @@ class CardController extends Controller
         // Validate the request
         $validatedData = $request->validate([
             'image' => 'nullable|string|max:255',
-            'qr_image'=>'nullable|string',
         ]);
         $validatedData['user_id'] = $user->id;
 

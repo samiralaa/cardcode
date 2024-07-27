@@ -28,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('cards/{id}', [CardController::class, 'update']);
     Route::delete('cards/{id}', [CardController::class, 'destroy']);
     Route::get('cards/slug/{slug}', [CardController::class, 'showBySlug']);
+    Route::get('get-one-card/{id}',[CardController::class, 'getOne']);
 
 });
 
