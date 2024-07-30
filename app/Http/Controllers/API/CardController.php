@@ -33,66 +33,50 @@ class CardController extends Controller
         return response()->json($card, 200);
     }
 
-    public function store(Request $request)
-    {
-        $user = Auth::user();
-
-        // Validate the request
-        $validatedData = $request->validate([
-            'image' => 'nullable|image',
-            'qr_image' => 'nullable|image',
-        ]);
-        $validatedData['user_id'] = $user->id;
-
-        // Handle the image upload
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('card_images', 'public');
-            $validatedData['image'] = $imagePath;
-        }
-
-        if ($request->hasFile('qr_image')) {
-            $imagePath = $request->file('image')->store('qr_image', 'public');
-            $validatedData['qr_image'] = $imagePath;
-        }
-        // Create the Card
-        $card = Card::create($validatedData);
-        return response()->json($card, 201); // Load card links in response
-    }
-
     public function update(Request $request, $id)
-    {
-        $user = Auth::user();
-        $card = Card::findOrFail($id);
+{
+    $user = Auth::user();
 
-        // Ensure the card belongs to the authenticated user
-        if ($card->user_id !== $user->id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+    // Find the existing card record
+    $card = Card::findOrFail($id);
 
-        $validatedData = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'link' => 'sometimes|required|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        if ($request->hasFile('logo')) {
-            // Optionally delete the old logo if it exists
-            if ($card->logo) {
-                Storage::disk('public')->delete($card->logo);
-            }
-
-            $path = $request->file('logo')->store('logos', 'public');
-            $validatedData['logo'] = $path;
-        }
-
-        $validatedData['slug'] = $user->name;
-
-        // Update the card with the validated data
-        $card->update($validatedData);
-
-        return response()->json($card, 200);
+    // Ensure the user is authorized to update this card
+    if ($card->user_id !== $user->id) {
+        return response()->json(['message' => 'Unauthorized'], 403);
     }
 
+    // Validate the request
+    $validatedData = $request->validate([
+        'image' => 'nullable|image',
+        'qr_image' => 'nullable|image',
+    ]);
+
+    // Handle the image upload
+    if ($request->hasFile('image')) {
+        // Delete the old image if it exists
+        if ($card->image) {
+            \Storage::disk('public')->delete($card->image);
+        }
+        $imagePath = $request->file('image')->store('card_images', 'public');
+        $validatedData['image'] = $imagePath;
+    }
+
+    if ($request->hasFile('qr_image')) {
+        // Delete the old QR image if it exists
+        if ($card->qr_image) {
+            \Storage::disk('public')->delete($card->qr_image);
+        }
+        $imagePath = $request->file('qr_image')->store('qr_images', 'public');
+        $validatedData['qr_image'] = $imagePath;
+    }
+
+    // Update the card
+    $card->update($validatedData);
+
+    return response()->json($card, 200); // Return the updated card
+}
+
+  
     public function destroy($id)
     {
         $card = Card::find($id);
