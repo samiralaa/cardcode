@@ -116,5 +116,7 @@ return [
      */
 
     'password_timeout' => 10800,
-    'ttl' => env('JWT_TTL', 60 * 50000 *200000),
+
+     'ttl' => env('JWT_TTL', 60 * 50000 *200000),
+
 ];
