@@ -39,7 +39,7 @@ class CardController extends Controller
 
         // Validate the request
         $validatedData = $request->validate([
-            'image' => 'required|image',
+            'image' => 'nullable|image',
             'qr_image' => 'nullable|image',
         ]);
         $validatedData['user_id'] = $user->id;

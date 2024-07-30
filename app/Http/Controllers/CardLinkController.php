@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Card;
 use App\Models\CardLink;
 use Illuminate\Http\Request;
 
@@ -9,18 +10,27 @@ class CardLinkController extends Controller
     public function index()
     {
         // Get all card links
-        return response()->json( CardLink::all());
+        return response()->json(CardLink::all());
     }
 
     public function store(Request $request)
     {
         // Validate request
         $validated = $request->validate([
-            'card_id' => 'required|exists:cards,id',
+            'card_id' => 'nullable',
             'link' => 'required|string',
             'logo' => 'required|string',
             'title' => 'required|string',
         ]);
+
+        if (!$request->card_id) {
+            $card = Card::create([
+                'image' => 'add-profile-bigger.jpg',
+                'qr_image' => 'image.png',
+                'user_id' => auth()->user()->id,
+            ]);
+            $validated['card_id'] = $card->id;
+        }
 
         // Create new card link
         $cardLink = CardLink::create($validated);
