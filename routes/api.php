@@ -31,7 +31,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('cards/slug/{slug}', [CardController::class, 'showBySlug']);
     Route::get('get-one-card/{id}',[CardController::class, 'getOne']);
     Route::post('detete-image/{id}',[CardController::class, 'deleteImageCard']);
-
+    Route::post('update-image/{id}',[CardController::class, 'updateImageCard']);
 });
 
 

@@ -107,4 +107,11 @@ class CardController extends Controller
        $card->save();
         return response()->json($card, 200);
     }
+
+    public function updateImageCard(Request $request, $id){
+        $card = Card::where('id', $id)->first();
+        $card->image = $request->image;
+        $card->save();
+        return response()->json($card, 200);
+    }
 }
