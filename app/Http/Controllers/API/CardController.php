@@ -103,9 +103,9 @@ class CardController extends Controller
     public function deleteImageCard($id){
 
         $card = Card::find($id);
-        $card->update[
+        $card->update([
             'image'=> null,
-        ];
+        ]);
         return response()->json($card, 200);
     }
 }
