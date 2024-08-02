@@ -99,4 +99,13 @@ class CardController extends Controller
         $card = User::where('id', $user->id)->with('cards.cardLinks')->first();
         return response()->json($card, 200);
     }
+
+    public function deleteImageCard($id){
+
+        $card = Card::find($id);
+        $card->update[
+            'image'=> null,
+        ];
+        return response()->json($card, 200);
+    }
 }
