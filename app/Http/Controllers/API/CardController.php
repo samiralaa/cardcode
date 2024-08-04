@@ -114,4 +114,40 @@ class CardController extends Controller
         $card->save();
         return response()->json($card, 200);
     }
+
+    public function store(Request $request)
+    {
+        $user = Auth::user();
+        
+        $request->validate([
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'qr_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Handle image upload for 'image' field
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('images', $imageName, 'public');
+        }
+
+        // Handle image upload for 'qr_image' field
+        $qrImagePath = null;
+        if ($request->hasFile('qr_image')) {
+            $qrImage = $request->file('qr_image');
+            $qrImageName = time() . '_' . $qrImage->getClientOriginalName();
+            $qrImagePath = $qrImage->storeAs('qrcodes', $qrImageName, 'public');
+        }
+
+        // Create a new card instance and save it
+        $card = new Card();
+        $card->user_id = $user->id;
+        $card->image = $imagePath; // Store the path to the image
+        $card->qr_image = $qrImagePath; // Store the path to the QR code image
+        $card->save();
+
+        return response()->json($card, 200);
+    }
+
 }

@@ -20,8 +20,7 @@ Route::post('password/reset', [AuthController::class, 'resetPassword']);
 Route::post('/forgot-password', [AuthController::class, 'sendResetCode']);
 
 
-
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('cards', [CardController::class, 'index']);
     Route::get('cards/{id}', [CardController::class, 'show']);
     Route::post('cards', [CardController::class, 'store']);
@@ -35,7 +34,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 
-Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('cards-link', [CardLinkController::class, 'index']);
     Route::get('cards-link/{id}', [CardLinkController::class, 'show']);
     Route::post('cards-link', [CardLinkController::class, 'store']);

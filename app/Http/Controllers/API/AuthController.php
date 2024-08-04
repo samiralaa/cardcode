@@ -29,25 +29,26 @@ class AuthController extends Controller
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
-        $credentials = $request->only('email', 'password');
-        $token = Auth::attempt($credentials);
 
-        if (!$token) {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('AuthToken')->plainTextToken; // Generate token using Sanctum
+
             return response()->json([
-                'message' => ' Email or Password Invalid',
-            ], 401);
+                'user' => $user,
+                'authorization' => [
+                    'token' => $token,
+                    'type' => 'bearer',
+                ]
+            ]);
         }
 
-        $user = Auth::user();
         return response()->json([
-            'user' => $user,
-            'authorization' => [
-                'token' => $token,
-                'type' => 'bearer',
-            ]
-        ]);
+            'message' => 'Email or Password Invalid',
+        ], 401);
     }
-
     public function register(Request $request)
     {
         $request->validate([
@@ -59,13 +60,19 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'domin_name'=>$request->domin_name,
+            'domin_name' => $request->domin_name,
             'password' => Hash::make($request->password),
         ]);
 
+        $token = $user->createToken('AuthToken')->plainTextToken; // Generate token using Sanctum
+
         return response()->json([
             'message' => 'User created successfully',
-            'user' => $user
+            'user' => $user,
+            'authorization' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
         ]);
     }
 
@@ -124,7 +131,8 @@ class AuthController extends Controller
         // Revoke all existing tokens
         $user->tokens()->delete();
 
-        return response()->json(['success' => true],
+        return response()->json(
+            ['success' => true],
             200
         );
     }
@@ -143,8 +151,6 @@ class AuthController extends Controller
         // Send the code to the user's email
         Mail::to($user->email)->send(new ResetPasswordCodeMail($reset_code));
 
-        return response()->json(['message' => 'Reset code sent successfully'],200);
+        return response()->json(['message' => 'Reset code sent successfully'], 200);
     }
-
-
 }
