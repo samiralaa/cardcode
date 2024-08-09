@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Mail\ResetPasswordCodeMail;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Mail\ResetPasswordCodeMail;
+use App\Models\Card;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -64,6 +65,13 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+            $card = Card::create([
+                'image' => 'add-profile-bigger.jpg',
+                'qr_image' => 'image.png',
+                'user_id' => $user->id,
+            ]);
+            $validated['card_id'] = $card->id;
+    
         $token = $user->createToken('AuthToken')->plainTextToken; // Generate token using Sanctum
 
         return response()->json([

@@ -100,6 +100,12 @@ class CardController extends Controller
         return response()->json($card, 200);
     }
 
+    public function userCard($id)
+    {
+        $card = User::where('id', $id)->with('cards.cardLinks')->first();
+        return response()->json($card, 200);
+    }
+
     public function deleteImageCard($id){
 
         $card = Card::where('id', $id)->first();

@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('cards/{id}', [CardController::class, 'destroy']);
     Route::get('cards/slug/{slug}', [CardController::class, 'showBySlug']);
     Route::get('get-one-card/{id}',[CardController::class, 'getOne']);
+    Route::get('user-cars/{id}',[CardController::class, 'userCard']);
     Route::post('detete-image/{id}',[CardController::class, 'deleteImageCard']);
     Route::post('update-image/{id}',[CardController::class, 'updateImageCard']);
 });
