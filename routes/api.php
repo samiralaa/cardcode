@@ -49,7 +49,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('users', [UserController::class, 'index']);
-    Route::delete('users/{id}', [UserController::class, 'delete']);
+    Route::delete('delete-
+    users/{id}', [UserController::class, 'delete']);
 });
 
 
