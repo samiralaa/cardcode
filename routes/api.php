@@ -48,7 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('users', [UserController::class, 'users']);
+    Route::get('users', [UserController::class, 'index']);
     Route::delete('users/{id}', [UserController::class, 'delete']);
 });
 
