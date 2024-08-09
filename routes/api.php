@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Api\CardController;
+
+use App\Http\Controllers\CardLinkController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\Api\CardController;
-use App\Http\Controllers\CardLinkController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
@@ -44,6 +46,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('cards-link/slug/{slug}', [CardLinkController::class, 'showBySlug']);
 
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('users', [UserController::class, 'users']);
+    Route::delete('users/{id}', [UserController::class, 'delete']);
+});
+
+
 
 
 
