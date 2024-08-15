@@ -12,6 +12,10 @@ class Card extends Model
         'user_id',
         'image',
         'qr_image',
+        'title_color',
+        'background_color',
+        'icon_color',
+        'share_color',
     ];
 
     public function user()

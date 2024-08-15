@@ -128,6 +128,10 @@ class CardController extends Controller
         $request->validate([
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'qr_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'title_color'=>'nullable',
+            'background_color'=>'nullable',
+            'icon_color'=>'nullable',
+            'share_color'=>'nullable',
         ]);
 
         // Handle image upload for 'image' field

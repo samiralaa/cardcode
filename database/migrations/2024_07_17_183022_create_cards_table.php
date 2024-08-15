@@ -17,15 +17,16 @@ return new class extends Migration
             ->references('id')
             ->on('users')
             ->onDelete('cascade');
-            
+            $table->string('title_color')->default('black');
+            $table->string('background_color')->default('blue');
+            $table->string('icon_color')->default('black');
+            $table->string('share_color')->default('yellow');
             $table->string('image');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+   
     public function down(): void
     {
         Schema::dropIfExists('cards');

@@ -8,7 +8,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        return response()->json(User::all(), 200);
+        return response()->json(User::with('cards.cardLinks')->all(), 200);
     }
 
     public function delete($id)
