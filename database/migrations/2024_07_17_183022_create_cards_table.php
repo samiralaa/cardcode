@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('background_color')->default('blue');
             $table->string('icon_color')->default('black');
             $table->string('share_color')->default('yellow');
+            $table->string('qr_image');
             $table->string('image');
             $table->timestamps();
         });
