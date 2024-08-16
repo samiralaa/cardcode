@@ -49,6 +49,9 @@ class CardController extends Controller
     $validatedData = $request->validate([
         'image' => 'nullable|image',
         'qr_image' => 'nullable|image',
+        'title_color' => 'nullable|string',
+        'background_color' => 'nullable|string',
+        'icon_color' => 'nullable|string',
     ]);
 
     // Handle the image upload
