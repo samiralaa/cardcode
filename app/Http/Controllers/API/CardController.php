@@ -52,6 +52,7 @@ class CardController extends Controller
         'title_color' => 'nullable|string',
         'background_color' => 'nullable|string',
         'icon_color' => 'nullable|string',
+        'share_color' =>'nullable|string'
     ]);
 
     // Handle the image upload
