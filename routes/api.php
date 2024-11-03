@@ -48,11 +48,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('users', [UserController::class, 'index']);
     Route::delete('delete-users/{id}', [\App\Http\Controllers\UserController::class, 'delete']);
 });
 
 
 
 
+Route::get('users', [UserController::class, 'index']);
 

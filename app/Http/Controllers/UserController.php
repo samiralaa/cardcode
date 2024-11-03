@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Jobs\ProcessExampleJob;
 use Illuminate\Http\Request;
 use App\Models\User;
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('cards.cardLinks')->get();
-        return response()->json($users, 200);
+        $data = User::all();
+        ProcessExampleJob::dispatch($data);
+
     }
 
     public function delete($id)
