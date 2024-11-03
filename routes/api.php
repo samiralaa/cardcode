@@ -20,6 +20,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::post('password/email', [AuthController::class, 'sendResetLinkEmail']);
 Route::post('password/reset', [AuthController::class, 'resetPassword']);
 Route::post('/forgot-password', [AuthController::class, 'sendResetCode']);
+Route::get('users', [AuthController::class, 'index']);
 
 Route::get('user-cars/{id}',[CardController::class, 'userCard']);
 Route::middleware('auth:sanctum')->group(function () {
@@ -48,11 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('users', [UserController::class, 'index']);
     Route::delete('delete-users/{id}', [\App\Http\Controllers\UserController::class, 'delete']);
 });
 
 
 
 
+Route::get('users', [UserController::class, 'index']);
 
