@@ -12,7 +12,7 @@ class UserController extends Controller
     public function index()
     {
         $data = User::all();
-        ProcessExampleJob::dispatch($data);
+      return response()->json($data, 200);
 
     }
 
