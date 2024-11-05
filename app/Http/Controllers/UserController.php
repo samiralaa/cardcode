@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $data = User::all();
+        $data = User::with('cards.cardLinks');
       return response()->json($data, 200);
 
     }
