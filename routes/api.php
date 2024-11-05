@@ -51,10 +51,10 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::delete('delete-users/{id}', [\App\Http\Controllers\UserController::class, 'delete']);
     Route::post('update-user', [\App\Http\Controllers\UserController::class, 'update']);
+    Route::get('users/{id}', [\App\Http\Controllers\UserController::class, 'index']);
 });
 
 
 
 
-Route::get('users', [UserController::class, 'index']);
 
