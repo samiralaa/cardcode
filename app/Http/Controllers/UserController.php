@@ -32,10 +32,10 @@ class UserController extends Controller
         return response()->json(['message' => 'User created successfully'], 201);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $user = Auth::user()->id;
-        $user = User::find($user);
+       
+        $user = User::find($id);
         if(!$user){
             return response()->json(['message' => 'User not found'], 404);
         }
